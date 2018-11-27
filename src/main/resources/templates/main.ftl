@@ -14,16 +14,28 @@
 <a class="btn btn-primary" data-toggle="collapse" href="#messageWriter" role="button" aria-expanded="false" aria-controls="messageWriter">
     Add new Message
 </a>
-    <div class="collapse" id="messageWriter">
+    <div class="collapse <#if message??>show</#if>" id="messageWriter">
         <div class="form-group mt-3">
             <form method="post" enctype="multipart/form-data">
                 <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                 <div class="form-group">
-                    <input type="text" class="form-control mr-2" name="text" placeholder="Введите сообщение"/>
+                    <input type="text" class="form-control mr-2 ${(textError??)?string('is-invalid', '')}"
+                            value="<#if message??>${message.text}</#if>" name="text" placeholder="Введите сообщение"/>
+                    <#if textError??>
+                    <div class="invalid-feedback">
+                        ${textError}
+                    </div>
+                    </#if>
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control mr-2" name="tag" placeholder="Тэг"/>
-                </div>'
+                    <input type="text" class="form-control mr-2 ${(tagError??)?string('is-invalid', '')}"
+                           value="<#if message??>${message.tag}</#if>"name="tag" placeholder="Тэг"/>
+                    <#if tagError??>
+                    <div class="invalid-feedback">
+                        ${tagError}
+                    </div>
+                    </#if>
+                </div>
                 <div class="form-group">
                     <div class="custom-file">
                         <input type="file" id="customFile" name="file"/>

@@ -1,10 +1,13 @@
 package com.example.sweater.domain;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.Set;
 
@@ -14,11 +17,22 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @NotBlank(message = "Username cannot be empty!")
+    //@Length(max = 20, message = "Username too long! (more then 20 characters)")
     private String username;
+    @NotBlank(message = "Password cannot be empty!")
+    //@Length(min = 8, message = "Password too short!(less then 8 characters)")
     private String password;
+    @Transient
+    //@NotBlank(message = "Password confirmation cannot be empty!")
+    ///@Length(min = 8, message = "Password too short! (less then 8 characters)")
+    private String password2;
     private boolean active;
 
+    @NotBlank(message = "Email cannot be empty!")
+    @Email(message = "Email is not correct!")
     private String email;
+
     private String activationCode;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
@@ -111,6 +125,14 @@ public class User implements UserDetails {
 
     public void setActivationCode(String activationCode) {
         this.activationCode = activationCode;
+    }
+
+    public String getPassword2() {
+        return password2;
+    }
+
+    public void setPassword2(String password2) {
+        this.password2 = password2;
     }
 }
 
